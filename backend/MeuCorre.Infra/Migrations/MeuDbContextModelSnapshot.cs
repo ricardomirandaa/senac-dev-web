@@ -56,6 +56,9 @@ namespace MeuCorre.Infra.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("Email")
+                        .IsUnique();
+
                     b.ToTable("Usuarios", (string)null);
                 });
 #pragma warning restore 612, 618

@@ -2,21 +2,20 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MeuCorre.Infra
 {
     public static class DependencyInjection
     {
-        public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
+        public static IServiceCollection AddInfrastructure(
+            this IServiceCollection services, IConfiguration configuration)
         {
-            var connectionString = configuration.GetConnectionString("MySql");
+            //Busca a string de conexão no arquivo appsettings.json
+            var connectionString = configuration.GetConnectionString("Mysql");
 
-            services.AddDbContext<MeuDbContext>(options => options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)));
+            //Registra o MeuDbContext e configura o uso do MySQL
+            services.AddDbContext<MeuDbContext>(options => 
+                options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)));
 
             return services;
         }

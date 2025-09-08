@@ -8,10 +8,16 @@
         public DateTime DataNascimento { get; private set; }
         public bool Ativo { get; private set; }
 
+        // Propriedade de navegação para a entidade Categoria pois
+        // o usuário pode ter várias categorias
+        public virtual ICollection<Categoria> Categorias { get; set; }
+
+
         //Construtor para criar um novo usuário.
         //Construtor é a primeira coisa que é executada quando uma classe é instanciada.
-        public Usuario(string nome, string email, DateTime dataNascimento, bool ativo)
+        public Usuario(string nome, string email, string senha, DateTime dataNascimento, bool ativo)
         {
+
             if (!TemIdadeMinima())
             {
                 throw new Exception("Usuário deve ter no mínimo 13 anos.");
@@ -19,7 +25,7 @@
 
             Nome = nome;
             Email = email;
-            Senha = ValidarSenha(Senha);
+            Senha = ValidarSenha(senha);
             DataNascimento = dataNascimento;
             Ativo = ativo;
         }
@@ -44,10 +50,10 @@
 
         public string ValidarSenha(string senha)
         {
-            if(Senha.Length < 6)
+            if (senha.Length < 6)
             {
-
-            }        
+                //Todo Fazer um tratamento de erro melhor
+            }
             return senha;
         }
 

@@ -5,17 +5,12 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
-using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace MeuCorre.Application.UseCases.Usuarios.Commands
 {
-    /// <summary>
-    /// Comando para criar um novo usuário.
-    /// Aqui você pode adicionar propriedades necessárias para a criação do usuário, como Nome, Email, Senha, etc.
-    /// </summary>
-    public class CriarUsuarioCommand : IRequest<(string, bool)>
+    public class AtualizarUsuarioCommand : IRequest
     {
         [Required(ErrorMessage = "Nome é obrigátorio")]
         public required string Nome { get; set; }
@@ -23,22 +18,18 @@ namespace MeuCorre.Application.UseCases.Usuarios.Commands
         [Required(ErrorMessage = "Email é obrigátorio")]
         public required string Email { get; set; }
 
-        [Required(ErrorMessage = "Senha é obrigátorio")]
-        [MinLength(6, ErrorMessage = "A senha deve ter no mínimo 6 caracteres")]
-        public required string Senha { get; set; }
-
         [Required(ErrorMessage = "Data de Nascimento é obrigátorio")]
         public required DateTime DataNascimento { get; set; }
     }
 
-    internal class CriarUsuarioCommandHandler : IRequestHandler<CriarUsuarioCommand, (string, bool)>
+    internal class AtualizarUsuarioCommandHandler : IRequestHandler<AtualizarUsuarioCommand, (string, bool)>
     {
         private readonly IUsuarioRepository _usuarioRepository;
-        public CriarUsuarioCommandHandler(IUsuarioRepository usuarioRepository)
+        public AtualizarUsuarioCommandHandler(IUsuarioRepository usuarioRepository)
         {
             _usuarioRepository = usuarioRepository;
         }
-        public async Task<(string, bool)> Handle(CriarUsuarioCommand request, CancellationToken cancellationToken)
+        public async Task<(string, bool)> Handle(AtualizarUsuarioCommand request, CancellationToken cancellationToken)
         {
             var usuarioExistente = await _usuarioRepository.ObterUsuarioPorEmail(request.Email);
             if (usuarioExistente != null)
@@ -46,14 +37,13 @@ namespace MeuCorre.Application.UseCases.Usuarios.Commands
                 return ("Já existe um usuário com este email.", false);
             }
 
-            var novoUsuario = new Usuario(
-                request.Nome, 
-                request.Email, 
-                request.Senha, 
-                request.DataNascimento, 
+            var atualizarUsuario = new Usuario(
+                request.Nome,
+                request.Email,
+                request.DataNascimento,
                 true);
 
-            await _usuarioRepository.CriarUsuarioAsync(novoUsuario);
+            await _usuarioRepository.AtualizarUsuarioAync(atualizarUsuario);
             return ("Usuário criado com sucesso.", true);
         }
     }

@@ -40,5 +40,10 @@ namespace MeuCorre.Infra.Repositories
             _meuDbContext.Usuarios.Remove(usuario);
             await _meuDbContext.SaveChangesAsync();
         }
+
+        public async Task<Usuario?> ObterUsuarioPorId(Guid id)
+        {
+            return await _meuDbContext.Usuarios.FirstOrDefaultAsync(u => u.Id == id);
+        }
     }
 }

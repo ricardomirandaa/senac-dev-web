@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace MeuCorre.Application.UseCases.Usuarios.Commands
 {
-    public class AtualizarUsuarioCommand : IRequest
+    public class AtualizarUsuarioCommand : IRequest<(string, bool)>
     {
         [Required(ErrorMessage = "Nome é obrigátorio")]
         public required string Nome { get; set; }
@@ -31,7 +31,7 @@ namespace MeuCorre.Application.UseCases.Usuarios.Commands
         }
         public async Task<(string, bool)> Handle(AtualizarUsuarioCommand request, CancellationToken cancellationToken)
         {
-            var usuarioExistente = await _usuarioRepository.ObterUsuarioPorEmail(request.Email);
+            var usuarioExistente = await _usuarioRepository.ObterUsuarioPorId(request.Id);
             if (usuarioExistente != null)
             {
                 return ("Já existe um usuário com este email.", false);
@@ -40,6 +40,7 @@ namespace MeuCorre.Application.UseCases.Usuarios.Commands
             var atualizarUsuario = new Usuario(
                 request.Nome,
                 request.Email,
+                string.Empty,
                 request.DataNascimento,
                 true);
 

@@ -19,13 +19,20 @@ namespace MeuCorre.Domain.Entities
         //Construtor é a primeira coisa que é executada quando uma classe é instanciada.
         public Usuario(string nome, string email, string senha, DateTime dataNascimento, bool ativo)
         {
+            ValidarEntidadeUsuario(email, senha, dataNascimento);
             Nome = nome;
             Email = email;
-            Senha = ValidarSenha(senha);
-            DataNascimento = ValidarIdadeMinima(dataNascimento);
+            Senha = senha;
+            DataNascimento = dataNascimento;
             Ativo = ativo;
         }
 
+        private void ValidarEntidadeUsuario(string email, string senha, DateTime dataNascimento )
+        {
+            ValidarIdadeMinima(dataNascimento);
+            ValidarSenha(senha);
+            ValidarEmail(email);
+        }
         
         //Regra negocio: Permite apenas usuários maiores de 13 anos.
         private DateTime ValidarIdadeMinima(DateTime nascimento)
@@ -59,6 +66,14 @@ namespace MeuCorre.Domain.Entities
                 throw new Exception("A senha deve conter pelo menos um número.");
             }
             return senha;
+        }
+        private void ValidarEmail(string email)
+        {
+            //Regra de negocio: email deve conter @ e um domínio válido.
+            if (!Regex.IsMatch(email, @"^[^@\s]+@[^@\s]+\.[^@\s]+$"))
+            {
+                throw new Exception("Email em formato inválido");
+            }
         }
         public void AtivarUsuario()
         {

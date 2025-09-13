@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 
 namespace MeuCorre.Controllers
-{ 
+{
     [ApiController]
     [Route("[Controller]")]
     public class UsuarioController : ControllerBase
@@ -30,6 +30,13 @@ namespace MeuCorre.Controllers
             {
                 return Conflict(mensagem);
             }
+
+            [HttpPut("[id]")]
+            public async Task<IActionResult> AtualizarUsuario(Guid id [FromBody] CriarUsuarioCommand command)
+            {
+
+            }
         }
+
     }
 }

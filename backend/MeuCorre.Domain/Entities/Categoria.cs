@@ -24,5 +24,7 @@ namespace MeuCorre.Domain.Entities
             Icone = icone;
             TipoDaTransacao = tipoDaTransacao;
         }
+
+
     }
 }

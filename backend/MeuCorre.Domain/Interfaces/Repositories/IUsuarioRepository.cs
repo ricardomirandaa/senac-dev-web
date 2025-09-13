@@ -14,6 +14,7 @@ namespace MeuCorre.Domain.Interfaces.Repositories
         Task RemoverUsuarioAsync(Usuario usuario); //DELETE
 
         // a ? significa que o select pode retornar nulo, ou seja, o usuario pode não ser encontrado.
-        Task<Usuario?> ObterUsuarioPorEmail(string email); //SELECT 
+        Task<Usuario?> ObterUsuarioPorEmail(string email); //SELECT
+        Task<Usuario?> ObterUsuarioPorId(Guid id); 
     }
 }

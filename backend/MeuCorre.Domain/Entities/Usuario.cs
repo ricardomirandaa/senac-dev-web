@@ -27,13 +27,29 @@ namespace MeuCorre.Domain.Entities
             Ativo = ativo;
         }
 
+        public void AtualizarInformacoes(string nome, DateTime dataNascimento)
+        {
+            ValidarIdadeMinima(dataNascimento);
+            Nome = nome;
+            DataNascimento = dataNascimento;
+            AtualizarDataMoficacao();
+        }
+        public void AtivarUsuario()
+        {
+            Ativo = true;
+            AtualizarDataMoficacao();
+        }
+        public void InativarUsuario()
+        {
+            Ativo = false;
+            AtualizarDataMoficacao();
+        }
         private void ValidarEntidadeUsuario(string email, string senha, DateTime dataNascimento )
         {
             ValidarIdadeMinima(dataNascimento);
             ValidarSenha(senha);
             ValidarEmail(email);
         }
-        
         //Regra negocio: Permite apenas usuários maiores de 13 anos.
         private DateTime ValidarIdadeMinima(DateTime nascimento)
         {
@@ -74,16 +90,6 @@ namespace MeuCorre.Domain.Entities
             {
                 throw new Exception("Email em formato inválido");
             }
-        }
-        public void AtivarUsuario()
-        {
-            Ativo = true;
-            AtualizarDataMoficacao();
-        }
-        public void InativarUsuario()
-        {
-            Ativo = false;
-            AtualizarDataMoficacao();
         }
     }
 }

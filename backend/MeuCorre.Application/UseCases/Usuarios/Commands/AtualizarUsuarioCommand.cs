@@ -12,11 +12,10 @@ namespace MeuCorre.Application.UseCases.Usuarios.Commands
 {
     public class AtualizarUsuarioCommand : IRequest<(string, bool)>
     {
+        [Required(ErrorMessage = "Id é obrigátorio")]
+        public required Guid Id { get; set; }
         [Required(ErrorMessage = "Nome é obrigátorio")]
         public required string Nome { get; set; }
-
-        [Required(ErrorMessage = "Email é obrigátorio")]
-        public required string Email { get; set; }
 
         [Required(ErrorMessage = "Data de Nascimento é obrigátorio")]
         public required DateTime DataNascimento { get; set; }
@@ -31,21 +30,16 @@ namespace MeuCorre.Application.UseCases.Usuarios.Commands
         }
         public async Task<(string, bool)> Handle(AtualizarUsuarioCommand request, CancellationToken cancellationToken)
         {
-            var usuarioExistente = await _usuarioRepository.ObterUsuarioPorId(request.Id);
-            if (usuarioExistente != null)
+            var usuario = await _usuarioRepository.ObterUsuarioPorId(request.Id);
+            if (usuario != null)
             {
-                return ("Já existe um usuário com este email.", false);
+                return ("Usuário não encontrado", false);
             }
 
-            var atualizarUsuario = new Usuario(
-                request.Nome,
-                request.Email,
-                string.Empty,
-                request.DataNascimento,
-                true);
+            usuario.AtualizarInformacoes(request.Nome, request.DataNascimento);
 
-            await _usuarioRepository.AtualizarUsuarioAync(atualizarUsuario);
-            return ("Usuário criado com sucesso.", true);
+            await _usuarioRepository.AtualizarUsuarioAync(usuario);
+            return ("Usuário atualizado com sucesso", true);
         }
     }
 }

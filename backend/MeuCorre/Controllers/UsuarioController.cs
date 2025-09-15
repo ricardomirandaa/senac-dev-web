@@ -30,13 +30,27 @@ namespace MeuCorre.Controllers
             {
                 return Conflict(mensagem);
             }
+        }
+        ///<summary>
+        ///Atualiza um usuário existente.
+        ///<param name="id"></param>
+        ///<param name="command"></param>
+        ///</summary>
 
-            [HttpPut("[id]")]
-            public async Task<IActionResult> AtualizarUsuario(Guid id [FromBody] CriarUsuarioCommand command)
+        [HttpPut("{id}")]
+        public async Task<IActionResult> AtualizarUsuario(Guid id, [FromBody] AtualizarUsuarioCommand command)
+        {
+            command.Id = id;
+            var (mensagem, sucesso) = await _mediator.Send(command);
+            if (sucesso)
             {
-
+                return Ok(mensagem);
+            }
+            else
+            {
+                return NotFound(mensagem);
             }
         }
-
     }
+
 }

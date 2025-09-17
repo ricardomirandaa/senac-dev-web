@@ -1,4 +1,6 @@
-﻿namespace MeuCorre.Domain.Entities
+﻿using System.Text.RegularExpressions;
+
+namespace MeuCorre.Domain.Entities
 {
     public class Usuario : Entidade
     {
@@ -17,56 +19,78 @@
         //Construtor é a primeira coisa que é executada quando uma classe é instanciada.
         public Usuario(string nome, string email, string senha, DateTime dataNascimento, bool ativo)
         {
-
-            if (!TemIdadeMinima())
-            {
-                throw new Exception("Usuário deve ter no mínimo 13 anos.");
-            }
-
+            ValidarEntidadeUsuario(email, senha, dataNascimento);
+            
             Nome = nome;
             Email = email;
-            Senha = ValidarSenha(senha);
+            Senha = senha;
             DataNascimento = dataNascimento;
             Ativo = ativo;
         }
 
-        //Regra negocio: Permite apenas usários maiores de 13 anos.
-        private int CalcularIdade()
+        public void AtualizarInformacoes(string nome, DateTime dataNascimento)
         {
-            var hoje = DateTime.Today;
-            var idade = hoje.Year - DataNascimento.Year;
-
-            if (DataNascimento.Date > hoje.AddYears(-idade))
-                idade--;
-
-            return idade;
+            ValidarIdadeMinina(dataNascimento);
+            Nome = nome;
+            DataNascimento = dataNascimento;
+            AtualizarDataMoficacao();
         }
-
-        private bool TemIdadeMinima()
-        {
-            var resultado = CalcularIdade() >= 13;
-            return resultado;
-        }
-
-        public string ValidarSenha(string senha)
-        {
-            if (senha.Length < 6)
-            {
-                //Todo Fazer um tratamento de erro melhor
-            }
-            return senha;
-        }
-
         public void AtivarUsuario()
         {
             Ativo = true;
             AtualizarDataMoficacao();
         }
-
         public void InativarUsuario()
         {
             Ativo = false;
             AtualizarDataMoficacao();
+        }
+
+
+
+        private void ValidarEntidadeUsuario(string email, string senha, DateTime nascimento)
+        {
+            ValidarIdadeMinina(nascimento);
+            ValidarSenha(senha);
+            ValidarEmail(email);
+        }
+        private void ValidarIdadeMinina(DateTime nascimento)
+        {
+            var hoje = DateTime.Today;
+            var idade = hoje.Year - nascimento.Year;
+
+            if (nascimento.Date > hoje.AddYears(-idade))
+                idade--;
+
+            if (idade < 13)
+            {
+                //Interrompe o processo devolvendo o erro
+                throw new Exception("Usuário deve ter no minimo 13 anos");
+            }
+        }
+        public void ValidarSenha(string senha)
+        {
+            //Regra de dnegocio: pelo menos uma letra e um número.
+            if (!Regex.IsMatch(senha, "[a-z]"))
+            {
+                throw new Exception("A senha deve contar pelo menos uma letra minuscula");
+            }
+            if (!Regex.IsMatch(senha, "[A-Z]"))
+            {
+                throw new Exception("A senha deve contar pelo menos uma letra maiuscula");
+            }
+            if (!Regex.IsMatch(senha,"[0-9]"))
+            {
+                throw new Exception("A senha deve contar pelo menos um números");
+            }
+        }
+        private void ValidarEmail(string email)
+        {
+            //Regra de negocio: email deve conter @ e um domínio válido.
+            if (!Regex.IsMatch(email, @"^[^@\s]+@[^@\s]+\.[^@\s]+$"))
+            {
+                throw new Exception("Email em formato inválido");
+            }
         }
     }
 }

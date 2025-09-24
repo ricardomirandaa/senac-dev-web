@@ -19,6 +19,7 @@ namespace MeuCorre.Application.UseCases.Categorias.Commands
         public required string Nome { get; set; }
         [Required(ErrorMessage = "Tipoo da transação(dsepesa ou receita) é obrigatório")]
         public required TipoTransacao Tipo { get; set; }
+        
         public string? Descricao { get; set; }
         public string? cor { get; set; }
         public string? Icone { get; set; }
@@ -27,13 +28,23 @@ namespace MeuCorre.Application.UseCases.Categorias.Commands
     internal class CriarCategoriaCommandHandler : IRequestHandler<CriarCategoriaCommand, (string, bool)>
     {
         private readonly ICategoriaRepository _categoriaRepository;
-        public CriarCategoriaCommandHandler(ICategoriaRepository categoriaRepository)
+        private readonly IUsuarioRepository _usuarioRepository;
+        public CriarCategoriaCommandHandler(ICategoriaRepository 
+                                  categoriaRepository, IUsuarioRepository usuarioRepository)
         {
             _categoriaRepository = categoriaRepository;
+            _usuarioRepository = usuarioRepository;
         }
         public async Task<(string, bool)> Handle(CriarCategoriaCommand request, CancellationToken cancellationToken)
         {
-               var existe = await _categoriaRepository.NomeExisteParaUsuarioAsync(request.Nome, request.Tipo, request.UsuarioId);
+            var existe = await _categoriaRepository.NomeExisteParaUsuarioAsync(request.Nome, request.Tipo, request.UsuarioId);
+
+
+            //NÃO PODE CADASTRAR CATEGORIA REPETIDA PARA O MESMO USUÁRIO
+            var existe =
+                await _categoriaRepository.NomeExisteParaUsuarioAsync(
+                    request.Nome, request.Tipo, request.UsuarioId);
+            
             if(existe)
             {
                 return ("Categoria ja cadastrada", false);

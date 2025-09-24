@@ -1,4 +1,4 @@
-﻿ using MeuCorre.Domain.Entities;
+﻿using MeuCorre.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace MeuCorre.Infra.Data.Context

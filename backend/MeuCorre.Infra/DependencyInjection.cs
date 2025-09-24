@@ -19,6 +19,8 @@ namespace MeuCorre.Infra
             services.AddDbContext<MeuDbContext>(options => 
                 options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)));
 
+            //Registra os repositorios para eles funcionarem com injeção de dependência
+
             services.AddScoped<IUsuarioRepository, UsuarioRepository>();
 
             return services;

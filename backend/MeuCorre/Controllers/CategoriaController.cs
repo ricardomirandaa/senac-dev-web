@@ -1,4 +1,5 @@
-using MediatR;
+﻿using MediatR;
+using MeuCorre.Application.UseCases.Categorias.Commands;
 using MeuCorre.Application.UseCases.Usuarios.Commands;
 using Microsoft.AspNetCore.Mvc;
 
@@ -6,19 +7,16 @@ namespace MeuCorre.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class UsuarioController : ControllerBase
+    public class CategoriaController : ControllerBase
     {
         private readonly IMediator _mediator;
-        public UsuarioController(IMediator mediator)
+        public CategoriaController(IMediator mediator)
         {
             _mediator = mediator;
         }
-        ///<summary>
-        ///Cria um novo usuário.
-        ///<param name="command"></param>
-        /// </summary>
+
         [HttpPost]
-        public async Task<IActionResult> CriarUsuario([FromBody] CriarUsuarioCommand command)
+        public async Task<IActionResult> CriarCategoria([FromBody] CriarCategoriaCommand command)
         {
             var (mensagem, sucesso) = await _mediator.Send(command);
             if (sucesso)
@@ -31,16 +29,10 @@ namespace MeuCorre.Controllers
             }
         }
 
-        ///<summary>
-        ///Atualiza um usuário existente.
-        ///<param name="id"></param>
-        ///<param name="command"></param>
-        ///</summary>
-
         [HttpPut("{id}")]
-        public async Task<IActionResult> AtualizarUsuario(Guid id, [FromBody] AtualizarUsuarioCommand command)
+        public async Task<IActionResult> AtualizarCategoria(Guid id, [FromBody] AtualizarCategoriaCommand command)
         {
-            command.Id = id;
+            command.CategoriaId = id;
             var (mensagem, sucesso) = await _mediator.Send(command);
             if (sucesso)
             {
@@ -52,4 +44,5 @@ namespace MeuCorre.Controllers
             }
         }
     }
+    
 }

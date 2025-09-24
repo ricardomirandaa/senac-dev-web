@@ -1,4 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations;
 using MediatR;
 using MeuCorre.Domain.Interfaces.Repositories;
 
@@ -14,6 +14,7 @@ namespace MeuCorre.Application.UseCases.Usuarios.Commands
 
         [Required(ErrorMessage = "Data de Nascimento é obrigatória")]
         public DateTime DataNascimento { get; set; }
+
     }
 
     internal class AtualizarUsuarioCommandHandler : IRequestHandler<AtualizarUsuarioCommand, (string, bool)>
@@ -34,7 +35,7 @@ namespace MeuCorre.Application.UseCases.Usuarios.Commands
 
             usuario.AtualizarInformacoes(request.Nome, request.DataNascimento);
 
-            await _usuarioRepository.AtualizarUsuarioAsync(usuario);
+            await _usuarioRepository.AtualizarUsuarioAync(usuario);
 
             return ("Usuário atualizado com sucesso", true);
         }

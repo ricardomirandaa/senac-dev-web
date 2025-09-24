@@ -1,4 +1,4 @@
-﻿using MediatR;
+using MediatR;
 using MeuCorre.Application.UseCases.Usuarios.Commands;
 using Microsoft.AspNetCore.Mvc;
 
@@ -31,11 +31,17 @@ namespace MeuCorre.Controllers
             }
         }
 
+        ///<summary>
+        ///Atualiza um usuário existente.
+        ///<param name="id"></param>
+        ///<param name="command"></param>
+        ///</summary>
+
         [HttpPut("{id}")]
         public async Task<IActionResult> AtualizarUsuario(Guid id, [FromBody] AtualizarUsuarioCommand command)
         {
             command.Id = id;
-            var(mensagem, sucesso) = await _mediator.Send(command);
+            var (mensagem, sucesso) = await _mediator.Send(command);
             if (sucesso)
             {
                 return Ok(mensagem);
@@ -45,6 +51,5 @@ namespace MeuCorre.Controllers
                 return NotFound(mensagem);
             }
         }
-
     }
 }

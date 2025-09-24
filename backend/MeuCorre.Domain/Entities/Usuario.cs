@@ -1,4 +1,4 @@
-﻿using System.Text.RegularExpressions;
+using System.Text.RegularExpressions;
 
 namespace MeuCorre.Domain.Entities
 {
@@ -20,7 +20,7 @@ namespace MeuCorre.Domain.Entities
         public Usuario(string nome, string email, string senha, DateTime dataNascimento, bool ativo)
         {
             ValidarEntidadeUsuario(email, senha, dataNascimento);
-            
+
             Nome = nome;
             Email = email;
             Senha = senha;
@@ -49,12 +49,31 @@ namespace MeuCorre.Domain.Entities
 
 
         private void ValidarEntidadeUsuario(string email, string senha, DateTime nascimento)
+        
         {
-            ValidarIdadeMinina(nascimento);
+            ValidarIdadeMinima(dataNascimento);
+            Nome = nome;
+            DataNascimento = dataNascimento;
+            AtualizarDataMoficacao();
+        }
+        public void AtivarUsuario()
+        {
+            Ativo = true;
+            AtualizarDataMoficacao();
+        }
+        public void InativarUsuario()
+        {
+            Ativo = false;
+            AtualizarDataMoficacao();
+        }
+        private void ValidarEntidadeUsuario(string email, string senha, DateTime dataNascimento )
+        {
+            ValidarIdadeMinima(dataNascimento);
             ValidarSenha(senha);
             ValidarEmail(email);
         }
-        private void ValidarIdadeMinina(DateTime nascimento)
+        //Regra negocio: Permite apenas usuários maiores de 13 anos.
+        private DateTime ValidarIdadeMinima(DateTime nascimento)
         {
             var hoje = DateTime.Today;
             var idade = hoje.Year - nascimento.Year;
@@ -64,28 +83,31 @@ namespace MeuCorre.Domain.Entities
 
             if (idade < 13)
             {
-                //Interrompe o processo devolvendo o erro
-                throw new Exception("Usuário deve ter no minimo 13 anos");
+                //interrompe o processo devolvendo o erro.
+                throw new Exception("Usuário deve ter no mínimo 13 anos");
             }
+
+            return nascimento;
         }
-        public void ValidarSenha(string senha)
+        public string ValidarSenha(string senha)
         {
-            //Regra de dnegocio: pelo menos uma letra e um número.
             if (!Regex.IsMatch(senha, "[a-z]"))
             {
-                throw new Exception("A senha deve contar pelo menos uma letra minuscula");
+                throw new Exception("A senha deve conter pelo menos letra.");
             }
             if (!Regex.IsMatch(senha, "[A-Z]"))
             {
-                throw new Exception("A senha deve contar pelo menos uma letra maiuscula");
+                throw new Exception("A senha deve conter pelo menos uma letra maiúscula.");
             }
-            if (!Regex.IsMatch(senha,"[0-9]"))
+            if (!Regex.IsMatch(senha, "[0-9]"))
             {
-                throw new Exception("A senha deve contar pelo menos um números");
+                throw new Exception("A senha deve conter pelo menos um número.");
             }
         }
+
         private void ValidarEmail(string email)
         {
+
             //Regra de negocio: email deve conter @ e um domínio válido.
             if (!Regex.IsMatch(email, @"^[^@\s]+@[^@\s]+\.[^@\s]+$"))
             {

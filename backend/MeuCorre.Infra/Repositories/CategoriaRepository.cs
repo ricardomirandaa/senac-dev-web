@@ -1,12 +1,12 @@
-﻿using MeuCorre.Domain.Entities;
 using MeuCorre.Domain.Enums;
+using MeuCorre.Domain.Entities;
 using MeuCorre.Domain.Interfaces.Repositories;
 using MeuCorre.Infra.Data.Context;
 using Microsoft.EntityFrameworkCore;
 
 namespace MeuCorre.Infra.Repositories
 {
-    public class CategoriaRepository : ICategoriaRepository
+    public class CategoriaRepository
     {
         private readonly MeuDbContext _meuDbContext;
         public CategoriaRepository(MeuDbContext meuDbContext)
@@ -14,13 +14,14 @@ namespace MeuCorre.Infra.Repositories
             _meuDbContext = meuDbContext;
         }
 
+
         public async Task<Categoria?> ObterPorIdAsync(Guid categoriaId)
         {
             var categoria = await _meuDbContext.Categorias.FindAsync(categoriaId);
             return categoria;
         }
 
-        public async Task<IEnumerable<Categoria>> ListarTodasPorUsuarioAsync(Guid usuarioId)
+        public async Task<IList<Categoria>> ListarTodasPorUsuarioAsync(Guid usuarioId)
         {
             var listaCategorias =  _meuDbContext.Categorias
                 .Where(c => c.UsuarioId == usuarioId);

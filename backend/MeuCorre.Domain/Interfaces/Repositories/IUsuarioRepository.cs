@@ -1,4 +1,4 @@
-﻿using MeuCorre.Domain.Entities;
+using MeuCorre.Domain.Entities;
 
 namespace MeuCorre.Domain.Interfaces.Repositories
 {
@@ -12,6 +12,5 @@ namespace MeuCorre.Domain.Interfaces.Repositories
         //o usuário pode não ser encontrado
         Task<Usuario?> ObterUsuarioPorEmail(string email);
         Task<Usuario?> ObterUsuarioPorId(Guid id);
-
     }
 }

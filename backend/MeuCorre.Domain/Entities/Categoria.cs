@@ -1,4 +1,4 @@
-﻿using System.Text.RegularExpressions;
+using System.Text.RegularExpressions;
 using MeuCorre.Domain.Enums;
 
 namespace MeuCorre.Domain.Entities
@@ -17,7 +17,7 @@ namespace MeuCorre.Domain.Entities
         // o usuário pode ter várias categorias
         public virtual Usuario Usuario { get; private set; }
 
-        public Categoria(Guid usuarioId, string nome, TipoTransacao tipoDaTransacao, string? descricao, string? cor, string? icone)
+        public Categoria(Guid usuarioId, string nome, TipoTransacao tipoDaTransacao, string? descricao, string cor, string icone)
         {
             ValidarEntidadeCategoria(cor);
 
@@ -38,8 +38,10 @@ namespace MeuCorre.Domain.Entities
             Cor = cor;
             Icone = icone;
             TipoDaTransacao = tipoDaTransacao;
+
             AtualizarDataMoficacao();
         }
+
         public void Ativar()
         {
             Ativo = true;
@@ -49,6 +51,7 @@ namespace MeuCorre.Domain.Entities
         {
             Ativo = false;
             AtualizarDataMoficacao();
+
         }
 
         private void ValidarEntidadeCategoria(string cor)

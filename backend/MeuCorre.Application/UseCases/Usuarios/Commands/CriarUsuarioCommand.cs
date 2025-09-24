@@ -1,4 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations;
 using MediatR;
 using MeuCorre.Domain.Entities;
 using MeuCorre.Domain.Interfaces.Repositories;
@@ -28,7 +28,6 @@ namespace MeuCorre.Application.UseCases.Usuarios.Commands
     internal class CriarUsuarioCommandHandler : IRequestHandler<CriarUsuarioCommand, (string,bool)>
     {
         private readonly IUsuarioRepository _usuarioRepository;
-
         public CriarUsuarioCommandHandler(IUsuarioRepository usuarioRepository)
         {
             _usuarioRepository = usuarioRepository;
@@ -36,11 +35,10 @@ namespace MeuCorre.Application.UseCases.Usuarios.Commands
 
         public async Task<(string, bool)> Handle(CriarUsuarioCommand request, CancellationToken cancellationToken)
         {
-            //vai no banco e verifica se já existe um usuário com o email informado
             var usuarioExistente = await _usuarioRepository.ObterUsuarioPorEmail(request.Email);
             if (usuarioExistente != null)
             {
-                return ("Já existe um usuário cadastrado com este email.", false);
+                return ("Já existe um usuário com este email.", false);
             }
 
             var novoUsuario = new Usuario(

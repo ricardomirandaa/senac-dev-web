@@ -40,6 +40,7 @@ namespace MeuCorre.Domain.Entities
             TipoDaTransacao = tipoDaTransacao;
             AtualizarDataMoficacao();
         }
+
         public void Ativar()
         {
             Ativo = true;

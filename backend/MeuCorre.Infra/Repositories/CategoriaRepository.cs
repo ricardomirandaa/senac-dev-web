@@ -20,7 +20,7 @@ namespace MeuCorre.Infra.Repositories
             return categoria;
         }
 
-        public async Task<IEnumerable<Categoria>> ListarTodasPorUsuarioAsync(Guid usuarioId)
+        public async Task<IList<Categoria>> ListarTodasPorUsuarioAsync(Guid usuarioId)
         {
             var listaCategorias =  _meuDbContext.Categorias
                 .Where(c => c.UsuarioId == usuarioId);

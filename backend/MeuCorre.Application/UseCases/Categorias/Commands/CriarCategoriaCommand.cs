@@ -29,8 +29,7 @@ namespace MeuCorre.Application.UseCases.Categorias.Commands
     {
         private readonly ICategoriaRepository _categoriaRepository;
         private readonly IUsuarioRepository _usuarioRepository;
-        public CriarCategoriaCommandHandler(ICategoriaRepository 
-                                  categoriaRepository, IUsuarioRepository usuarioRepository)
+        public CriarCategoriaCommandHandler(ICategoriaRepository categoriaRepository, IUsuarioRepository usuarioRepository)
         {
             _categoriaRepository = categoriaRepository;
             _usuarioRepository = usuarioRepository;
@@ -41,11 +40,11 @@ namespace MeuCorre.Application.UseCases.Categorias.Commands
 
 
             //NÃO PODE CADASTRAR CATEGORIA REPETIDA PARA O MESMO USUÁRIO
-            var existe =
+            var jaExiste =
                 await _categoriaRepository.NomeExisteParaUsuarioAsync(
                     request.Nome, request.Tipo, request.UsuarioId);
             
-            if(existe)
+            if(jaExiste)
             {
                 return ("Categoria ja cadastrada", false);
             }

@@ -17,7 +17,6 @@ namespace MeuCorre.Domain.Interfaces.Repositories
 
         //Verifica se já existe uma categoria com o mesmo
         //nome e tipo para o usuário informado
-        //nome e tipo para o usuário informado
         Task<bool> NomeExisteParaUsuarioAsync(string nome, TipoTransacao tipo, Guid usuarioId);
 
         //Adiciona uma nova categoria no banco de dados

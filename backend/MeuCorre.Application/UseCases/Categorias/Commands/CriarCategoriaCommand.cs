@@ -12,9 +12,11 @@ using System.Threading.Tasks;
 namespace MeuCorre.Application.UseCases.Categorias.Commands
 {
     public class CriarCategoriaCommand : IRequest<(string, bool)>
-    {
+    {        public required Guid UsuarioId { get; set; }
+
         [Required(ErrorMessage = "È necessario informar o id do usuário")]
         public required Guid UsuarioId { get; set; }
+
         [Required(ErrorMessage = "Nome da categoria é obrigatório")]
         public required string Nome { get; set; }
         [Required(ErrorMessage = "Tipoo da transação(dsepesa ou receita) é obrigatório")]
